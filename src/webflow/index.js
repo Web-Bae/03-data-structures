@@ -1,8 +1,8 @@
 // Elements
-const todoList = document.querySelector("#todo-list");
-const todoInput = document.querySelector("#todo-input-field");
-const todoTemplate = document.querySelector("#todo-item");
-const todoForm = document.querySelector("#todo-form");
+const todoList = document.querySelector("[data-todo-list]");
+const todoInput = document.querySelector("[data-todo-input]");
+const todoTemplate = document.querySelector("[data-todo-item]");
+const todoForm = document.querySelector("[data-todo-form]");
 
 const todos = [
   {
@@ -25,7 +25,19 @@ const todos = [
 
 // Clears the todo list and renders the todos
 function renderTodos() {
-  // Your code here
+  todoList.innerHTML = ""
+
+  todos.forEach((todo) => {
+    const todoClone = todoTemplate.cloneNode(true)
+    const todoText = todoClone.querySelector(".todo-text")
+    todoText.textContent = todo.text;
+
+    if(todo.completed) {
+      todoText.classList.add("completed");
+    }
+    todoClone.addEventListener("click", toggleCompleted)
+    todoList.appendChild(todoClone)
+  });
 }
 
 // Takes the value from the input field and adds a new todo to the todos array
@@ -37,10 +49,19 @@ function addTodo(e) {
   e.stopPropagation();
 
   // Your code here
+  const inputText = todoInput.value;
+  const newTodo = {
+    text: inputText,
+    completed: false,
+  };
+  todos.push(newTodo)
+  renderTodos();
+  todoInput.value = "";
 }
 
 function toggleCompleted(e) {
-  // Your code here
+  const todoTextElement = e.target;
+  todoTextElement.classList.toggle("completed")
 }
 
 // Execution
